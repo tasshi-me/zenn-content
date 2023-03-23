@@ -3,12 +3,15 @@
 * [📘 How to use](https://zenn.dev/zenn/articles/zenn-cli-guide)
 
 ```
-  👇  新しい記事を作成する
+  👇 Create new article
   $ zenn new:article
 
-  👇  新しい本を作成する
+  👇 Create new article with custom slug
+  $ zenn new:article --slug <slug>
+
+  👇 Create new book
   $ zenn new:book
 
-  👇  投稿をプレビューする
+  👇 Preview articles
   $ zenn preview
 ```

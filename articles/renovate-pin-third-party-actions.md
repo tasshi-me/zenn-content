@@ -1,6 +1,6 @@
 ---
 title: "【Renovate】サードパーティアクションをコミットSHAで管理する"
-emoji: "💭"
+emoji: "🧱"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["githubactions", "renovate"]
 published: true

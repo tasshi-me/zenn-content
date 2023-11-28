@@ -50,7 +50,7 @@ https://docs.renovatebot.com/modules/manager/github-actions/#additional-informat
 
 ```yml:.github/workflows/workflow.yml
 steps:
-  - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # renovate: tag=v3.6.0
+  - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
 ```
 
 :::message
@@ -96,7 +96,7 @@ https://docs.renovatebot.com/presets-helpers/#helperspingithubactiondigests
 ```yml
 steps:
   - uses: actions/checkout@v3
-  - uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # renovate: tag=v1.146.0
+  - uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
 ```
 
 ## 終わりに

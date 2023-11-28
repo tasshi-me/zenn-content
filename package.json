@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/mshrtsr/zenn-content#readme",
   "devDependencies": {
-    "zenn-cli": "^0.1.142"
+    "zenn-cli": "^0.1.149"
   }
 }

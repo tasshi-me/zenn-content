@@ -46,7 +46,7 @@ RenovateではアクションのバージョンをコミットSHAで指定しつ
 
 https://docs.renovatebot.com/modules/manager/github-actions/#additional-information
 
-`uses` の行末尾に `# renovate: tag=<tagname>` の形式でコメントを追加すると、バージョンに追従してアップデートが行われるようになります。
+`uses` の行末尾に `# <tagname>` の形式でコメントを追加すると、バージョンに追従してアップデートが行われるようになります。
 
 ```yml:.github/workflows/workflow.yml
 steps:

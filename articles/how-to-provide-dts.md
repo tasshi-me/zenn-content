@@ -2,7 +2,7 @@
 title: "JavaScript APIの型定義の提供方法について"
 emoji: "🫥"
 type: "tech"
-topics: ["githubactions", "renovate"]
+topics: ["typescript", "api"]
 publication_name: "cybozu_frontend"
 published: false
 ---

@@ -117,7 +117,7 @@ https://www.typescriptlang.org/tsconfig#typeRoots
 
 https://www.typescriptlang.org/tsconfig#types
 
-typeRootsから特定のパッケージの除外するオプションはこの記事の執筆時点では存在しませんでした。  
+typeRootsから特定のパッケージを除外するオプションはこの記事の執筆時点では存在しません。
 TypeScriptリポジトリで議論はあったようですが、採用には至らなかったようです。
 
 https://github.com/microsoft/TypeScript/issues/18588#issuecomment-704482601
@@ -139,7 +139,7 @@ DefinitelyTypedのデメリットのそのまま逆です。
 ### 環境・設定に応じた型定義を出し分けることができる
 
 typeRootsの外で型定義を提供した場合、コードベースに型を読み込むには型定義をimportしてもらう必要があります。
-これは利用者の手間が増える一方で、読み込む型定義を細かく制御したい場合には有益です。
+これは利用者の手間が増える一方で、読み込む型定義を細かく制御したい場合には有用です。
 
 - ファイルごとに型定義を読み込むかどうかを制御できる
 - Conditional exportsで複数の型定義を提供できる
@@ -191,12 +191,12 @@ import "@kintone/types/special-apis" // 特定の設定が有効な場合のみ�
 これはDefinitelyTypedでも実現可能ですが、このような目的で型定義をConditional exportsしているパッケージは[なさそう](https://github.com/search?q=repo%3ADefinitelyTyped%2FDefinitelyTyped+exports+language%3AJSON&type=code&l=JSON&p=1)でした。
 
 加えて、READMEが自動生成であることから利用方法が分かりにくいことも予想されます。
-そのため、独自に公開した場合のメリットとして紹介させていただきました。
+そのため、独自に公開した場合のメリットとして紹介しました。
 :::
 
 ## 終わりに
 
-型定義の提供方法について、色々と検討した内容を紹介させていただきました。
+型定義の提供方法について、色々と検討した内容を紹介しました。
 DefinitelyTypedはJavaScriptの資産をTypeScriptで再利用できる素晴らしい仕組みですが、そこから離れて独自に型定義を提供することにもまたメリットがありそうです。
 
 私の所属しているkintone DXチームでは、SDK開発などのエコシステムの開発者体験（DX）を向上させる活動をしています。

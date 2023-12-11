@@ -204,3 +204,6 @@ DefinitelyTypedはJavaScriptの資産をTypeScriptで再利用できる素晴ら
 
 https://blog.cybozu.io/entry/2023/06/09/113000
 https://cybozu.co.jp/recruit/entry/career/lead-engineer-kintone-ecosystem.html
+
+---
+https://adventar.org/calendars/9255

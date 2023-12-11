@@ -4,7 +4,7 @@ emoji: "🫥"
 type: "tech"
 topics: ["typescript", "api"]
 publication_name: "cybozu_frontend"
-published: false
+published: true
 ---
 
 この記事は[Cybozu Frontend Advent Calendar 2023](https://adventar.org/calendars/9255)の11日目です。

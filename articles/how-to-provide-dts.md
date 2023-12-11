@@ -199,7 +199,7 @@ import "@kintone/types/special-apis" // 特定の設定が有効な場合のみ�
 型定義の提供方法について、色々と検討した内容を紹介させていただきました。
 DefinitelyTypedはJavaScriptの資産をTypeScriptで再利用できる素晴らしい仕組みですが、そこから離れて独自に型定義を提供することにもまたメリットがありそうです。
 
-私の所属しているkintone DXチームではkintoneエコシステムの開発者体験（DX）を向上させる活動をしています。
+私の所属しているkintone DXチームでは、SDK開発などのエコシステムの開発者体験（DX）を向上させる活動をしています。
 興味のある方は以下の記事もご覧ください。
 
 https://blog.cybozu.io/entry/2023/06/09/113000

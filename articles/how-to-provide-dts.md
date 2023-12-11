@@ -24,12 +24,15 @@ APIの型定義の提供方法に悩んでいる方の参考になれば幸い�
 
 - 自社プラットフォームのJavaScript APIの型定義パッケージを公開したい
 - 一般的には DefinitelyTyped (`@types`) で公開する
-- オーナーシップや読み込み制御の観点で自社 organization での公開にもメリットがありそう
+- オーナーシップや読み込み制御の観点では独自公開にもメリットがありそう
 
 ## 背景情報
 
 Webサービスでは、しばしばグローバル変数などを通してJavaScriptを介した機能・データへのアクセスが提供されることがあります。  
-これはMDNでは[Client-side web APIs](https://developer.mozilla.org/ja/docs/Learn/JavaScript/Client-side_web_APIs)、その中でも[Third-party APIs](https://developer.mozilla.org/ja/docs/Learn/JavaScript/Client-side_web_APIs/Third_party_APIs)で紹介されています。  
+これはMDNでは[Client-side web APIs](https://developer.mozilla.org/ja/docs/Learn/JavaScript/Client-side_web_APIs)、その中でも[Third-party APIs](https://developer.mozilla.org/ja/docs/Learn/JavaScript/Client-side_web_APIs/Third_party_APIs)で紹介されています。
+
+https://developer.mozilla.org/ja/docs/Learn/JavaScript/Client-side_web_APIs
+
 実際のサービス上では、REST APIと区別してJavaScript APIと呼ばれることが多い印象です。
 
 - kintone: [kintone JavaScript API](https://cybozu.dev/ja/kintone/docs/js-api/)
@@ -47,7 +50,7 @@ Webサービスでは、しばしばグローバル変数などを通してJavaS
 JavaScript APIの型定義をnpmパッケージとして提供する場合、主に2つの方法があります。
 
 - DefinitelyTyped (`@types`) 配下のパッケージとして公開する
-- 自前の型定義パッケージを公開する
+- 独自の型定義パッケージを公開する
 
 ## DefinitelyTyped (`@types`) 配下のパッケージとして公開する
 
@@ -119,9 +122,9 @@ TypeScriptリポジトリで議論はあったようですが、採用には至�
 
 https://github.com/microsoft/TypeScript/issues/18588#issuecomment-704482601
 
-## 自前の型定義パッケージを公開する
+## 独自の型定義パッケージを公開する
 
-DefinitelyTyped で公開しない場合、自社のOrganizationなどで独自のパッケージを公開することになります。
+DefinitelyTyped で公開しない場合、自社のOrganizationなどで独自にパッケージを公開することになります。
 
 実際に試してはいないのですが、大きく2つのメリットがありそうでした。
 
@@ -188,7 +191,7 @@ import "@kintone/types/special-apis" // 特定の設定が有効な場合のみ�
 これはDefinitelyTypedでも実現可能ですが、このような目的で型定義をConditional exportsしているパッケージは[なさそう](https://github.com/search?q=repo%3ADefinitelyTyped%2FDefinitelyTyped+exports+language%3AJSON&type=code&l=JSON&p=1)でした。
 
 加えて、READMEが自動生成であることから利用方法が分かりにくいことも予想されます。
-そのため、自前公開した場合のメリットとして紹介させていただきました。
+そのため、独自に公開した場合のメリットとして紹介させていただきました。
 :::
 
 ## 終わりに

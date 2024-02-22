@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mshrtsr/zenn-content.git"
+    "url": "git+https://github.com/tasshi-me/zenn-content.git"
   },
   "author": "Masaharu TASHIRO <masatsr.kit@gmail.com>",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/mshrtsr/zenn-content/issues"
+    "url": "https://github.com/tasshi-me/zenn-content/issues"
   },
-  "homepage": "https://github.com/mshrtsr/zenn-content#readme",
+  "homepage": "https://github.com/tasshi-me/zenn-content#readme",
   "devDependencies": {
     "zenn-cli": "^0.1.149"
   }

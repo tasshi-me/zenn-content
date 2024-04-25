@@ -10,7 +10,7 @@ published: true
 この記事は[Cybozu Frontend Advent Calendar 2023](https://adventar.org/calendars/9255)の11日目です。
 
 - 10日目はこちら→ [プロジェクトを理解するためのReactデザインパターン](https://zenn.dev/cybozu_frontend/articles/design-patterns-in-react)
-- 12日目はこちら→ Coming soon!
+- 12日目はこちら→ [GitHub Actions のキャッシュを使った VRT のすゝめ](https://zenn.dev/cybozu_ept/articles/practice-vrt-using-github-actions-cache)
 
 こんにちは、サイボウズ株式会社の[tasshi](https://twitter.com/tasshi_me)です。  
 最近は[コーヒーを控えた生活](https://sizu.me/tasshi/posts/ku4e0czkb1ab)をしています。

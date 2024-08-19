@@ -131,6 +131,8 @@ GitHub CLI を使ってスプリントを更新するシェルスクリプトを
 
 このシェルスクリプトを Actions で定期実行します。
 
+![スプリント更新のフローチャート](/images/automate-github-projects-with-gh-cli/script-flowchart.png)
+
 ### 問題点
 
 こうして無事スプリントの更新を自動化することができました。
@@ -432,7 +434,7 @@ GitHub Projects を自動化し、その処理を再利用可能な形にパッ�
 Projects は Repository や Actions との親和性が高く、プロセス自動化のハードルが低いのが魅力的ですね。
 メンテナンスコストを上手くコントロールしつつ、どんどん手作業を減らして開発生産性を上げていきましょう！
 
-kintone の新機能開発や改善活動に興味のある方は、以下の記事もご覧ください。
+kintone の新機能開発や改善活動に興味のある方は、以下の記事もご覧ください！
 
 https://speakerdeck.com/cybozuinsideout/kintone-development-team-recruitment-information
 https://cybozu.co.jp/recruit/entry/career/web-engineer-kintone.html

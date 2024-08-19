@@ -4,7 +4,7 @@ emoji: "🪄"
 type: "tech"
 topics: ["github", "githubactions", "go"]
 publication_name: "cybozu_ept"
-published: false
+published: true
 ---
 
 :::message

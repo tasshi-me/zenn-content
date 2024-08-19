@@ -1,5 +1,5 @@
 ---
-title: "GitHub ProjectsをGitHub CLIで自動化、そしてその先へ"
+title: "ProjectsをGitHub CLIで自動化、そしてその先へ"
 emoji: "🪄"
 type: "tech"
 topics: ["github", "githubactions", "go"]

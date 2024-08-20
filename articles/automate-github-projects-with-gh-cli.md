@@ -10,7 +10,7 @@ published: true
 :::message
 この記事は、[CYBOZU SUMMER BLOG FES '24](https://cybozu.github.io/summer-blog-fes-2024/) (kintone Stage) DAY 7の記事です。
 - DAY 6の記事はこちら→ [kintone ナビゲーション / コミュニケーション系チームの紹介](https://blog.cybozu.io/entry/2024/08/18/080000_1)
-- DAY 8の記事はこちら→ Comming Soon!
+- DAY 8の記事はこちら→ [エンジニアと顧客理解](https://blog.cybozu.io/entry/2024/08/20/180000)
 :::
 
 こんにちは、サイボウズ株式会社の [tasshi](https://twitter.com/tasshi_me) です。

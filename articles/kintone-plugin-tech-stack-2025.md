@@ -9,7 +9,7 @@ published: true
 :::message
 この記事は、[kintone Advent Calendar 2025](https://qiita.com/advent-calendar/2025/kintone) の3日目の記事です。
 - 2日目の記事はこちら→ [kintoneローカルMCPでAIサンタを召喚してみた話](https://qiita.com/shinshin3/items/064472a5e39fde08d2d2)
-- 4日目の記事はこちら→ Coming soon!
+- 4日目の記事はこちら→ [kintone開発の「あるある課題」に終止符を ─ OSS 「kintone App Toolkit」を 公開しました！](https://qiita.com/NestRec/items/f809ffeba028ae9534ff)
 :::
 
 こんにちは、[tasshi](https://twitter.com/tasshi_me) です。

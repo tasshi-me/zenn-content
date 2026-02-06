@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/tasshi-me/zenn-content#readme",
   "devDependencies": {
-    "zenn-cli": "^0.1.154"
+    "zenn-cli": "^0.4.5"
   }
 }

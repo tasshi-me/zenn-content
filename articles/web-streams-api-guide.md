@@ -4,6 +4,7 @@ emoji: "🚰"
 type: "tech"
 topics: ["typescript", "javascript", "web", "nodejs", "frontend"]
 published: false
+publication_name: "cybozu_frontend"
 ---
 
 :::message

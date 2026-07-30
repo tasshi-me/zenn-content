@@ -6,7 +6,9 @@ topics: ["typescript", "javascript", "web", "nodejs", "frontend"]
 published: false
 ---
 
+:::message
 この記事は、[CYBOZU SUMMER BLOG FES '26](https://summer-blog-fes.cybozu.io/2026/) (Frontend Team) DAY 8の記事です。
+:::
 
 こんにちは、[tasshi](https://twitter.com/tasshi_me) です。
 

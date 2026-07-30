@@ -298,7 +298,7 @@ console.log("インポート完了");
 :::
 
 レコード数がどれだけ多くても、メモリ上に展開されるのは処理中のchunkだけです。
-また、後述する背圧によって、DBへの書き込み速度に合わせてレスポンスの読み込み速度も自動で調整されます。
+また、背圧（詳しくは後述）によって、DBへの書き込み速度に合わせてレスポンスの読み込み速度も自動で調整されます。
 
 ### 2. LLMの回答をリアルタイム表示
 
@@ -319,7 +319,7 @@ const response = await fetch("https://api.example.com/chat", {
 });
 
 for await (const chunk of response.body!.pipeThrough(new TextDecoderStream())) {
-  appendToScreen(chunk); // 画面に追記していく
+  appendToScreen(chunk); // DOM要素にテキストを追記する関数（実装は省略）
 }
 ```
 
@@ -423,6 +423,75 @@ HTTP/1.1（`Transfer-Encoding: chunked`）で検証したところ、次の挙�
 https://speakerdeck.com/tasshi/web-streams-api-and-tcp-flow-control
 :::
 
+## Promiseベースの非同期処理との相互運用性
+
+Web Streams APIはPromiseベースの非同期処理と組み合わせやすく設計されています。
+
+### ストリームをasync/awaitの中で使う
+
+`pipeTo()`の返り値はPromiseです。
+パイプチェーンでのデータ処理が終わるまで`await`で待つことができます。
+
+```typescript
+await readable.pipeThrough(transform).pipeTo(writable);
+// ここに到達した時点で全chunkの処理が完了している
+```
+
+chunkを1つずつ操作したい場合は、reader/writerを取得します。
+
+- `ReadableStream.getReader()` / `WritableStream.getWriter()`でreader/writerを取得
+- `await reader.read()` / `await writer.write()`でchunkを1つずつ読み込み/書き込みできる
+
+```typescript
+const reader = readable.getReader();
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  console.log(value);
+}
+```
+
+### ストリームを反復処理する
+
+`ReadableStream`は非同期反復可能（`[Symbol.asyncIterator]()`を実装している）なので、`for await ... of`で反復処理できます。
+
+```typescript
+for await (const chunk of readable) {
+  console.log(chunk);
+}
+```
+
+また、`Array.fromAsync()`でデータを全て読み出して配列に格納することもできます。
+
+```typescript
+const chunks = await Array.fromAsync(readable);
+```
+
+:::message
+`ReadableStream`の非同期反復は、Chrome/Edge 124以降、Firefox 110以降、Node.js、Denoで利用できます。
+Safariは長らく非対応でしたが、Safari 27（2026年6月にベータ公開）で対応予定です。
+
+`Array.fromAsync()`自体は全ての主要ブラウザとNode.js v22以降で利用できます。
+:::
+
+### イテラブルからストリームを作成する
+
+[`ReadableStream.from()`](https://developer.mozilla.org/ja/docs/Web/API/ReadableStream/from_static)を使うと、反復可能オブジェクト（または非同期反復可能オブジェクト）から`ReadableStream`を作成できます。
+
+```typescript
+async function* generate() {
+  yield "foo";
+  yield "bar";
+}
+
+const readable = ReadableStream.from(generate());
+```
+
+:::message
+`ReadableStream.from()`は、Firefox 117以降、Node.js v20.6以降、Denoで利用できます。
+Chrome/Edgeは執筆時点（2026年7月）で未対応、SafariはSafari 27で対応予定です。
+:::
+
 ## Node.js Streamとの違いと互換性
 
 サーバーサイドJSでストリームといえば、[Node.jsのStream](https://nodejs.org/api/stream.html)（以下、Node Stream）を思い浮かべる方も多いと思います。
@@ -518,75 +587,6 @@ const stream = new TransformStream<string, number>({
 - Node Streamとも`toWeb()` / `fromWeb()`で相互変換できる
 
 一方、昔からあるnpmパッケージはNode Streamを使っているため、当面は`toWeb()` / `fromWeb()`メソッドで変換しながら併用することになりそうです。
-
-## Promiseベースの非同期処理との相互運用性
-
-Web Streams APIはPromiseベースの非同期処理と組み合わせやすく設計されています。
-
-### ストリームをasync/awaitの中で使う
-
-`pipeTo()`の返り値はPromiseです。
-パイプチェーンでのデータ処理が終わるまで`await`で待つことができます。
-
-```typescript
-await readable.pipeThrough(transform).pipeTo(writable);
-// ここに到達した時点で全chunkの処理が完了している
-```
-
-chunkを1つずつ操作したい場合は、reader/writerを取得します。
-
-- `ReadableStream.getReader()` / `WritableStream.getWriter()`でreader/writerを取得
-- `await reader.read()` / `await writer.write()`でchunkを1つずつ読み込み/書き込みできる
-
-```typescript
-const reader = readable.getReader();
-while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
-  console.log(value);
-}
-```
-
-### ストリームを反復処理する
-
-`ReadableStream`は非同期反復可能（`[Symbol.asyncIterator]()`を実装している）なので、`for await ... of`で反復処理できます。
-
-```typescript
-for await (const chunk of readable) {
-  console.log(chunk);
-}
-```
-
-また、`Array.fromAsync()`でデータを全て読み出して配列に格納することもできます。
-
-```typescript
-const chunks = await Array.fromAsync(readable);
-```
-
-:::message
-`ReadableStream`の非同期反復は、Chrome/Edge 124以降、Firefox 110以降、Node.js、Denoで利用できます。
-Safariは長らく非対応でしたが、Safari 27（2026年6月にベータ公開）で対応予定です。
-
-`Array.fromAsync()`自体は全ての主要ブラウザとNode.js v22以降で利用できます。
-:::
-
-### イテラブルからストリームを作成する
-
-[`ReadableStream.from()`](https://developer.mozilla.org/ja/docs/Web/API/ReadableStream/from_static)を使うと、反復可能オブジェクト（または非同期反復可能オブジェクト）から`ReadableStream`を作成できます。
-
-```typescript
-async function* generate() {
-  yield "foo";
-  yield "bar";
-}
-
-const readable = ReadableStream.from(generate());
-```
-
-:::message
-`ReadableStream.from()`は、Firefox 117以降、Node.js v20.6以降、Denoで利用できます。
-Chrome/Edgeは執筆時点（2026年7月）で未対応、SafariはSafari 27で対応予定です。
-:::
 
 ## まとめ
 

@@ -88,6 +88,8 @@ Web Streams APIの特徴は次のとおりです。
 
 #### ReadableStream（読み取り可能なストリーム）
 
+![ReadableStream](/images/web-streams-api-guide/readable-stream.png)
+
 基となるソース（underlying source）から流れるデータを表現するオブジェクトです。
 ソースから流れるデータをchunkに分割し、ストリーム処理できる形で提供します。
 
@@ -101,6 +103,8 @@ Web Streams APIの特徴は次のとおりです。
 
 #### TransformStream（変換ストリーム）
 
+![TransformStream](/images/web-streams-api-guide/transform-stream.png)
+
 ストリームに流れるデータをある形式から別の形式に変換するオブジェクトです。
 標準で提供されている実装もあります。
 
@@ -108,6 +112,8 @@ Web Streams APIの特徴は次のとおりです。
 - `CompressionStream` / `DecompressionStream`: データの圧縮・展開（gzip、deflate）
 
 #### WritableStream（書き込み可能なストリーム）
+
+![WritableStream](/images/web-streams-api-guide/writable-stream.png)
 
 基となるシンク（underlying sink）に流れるデータを表現するオブジェクトです。
 

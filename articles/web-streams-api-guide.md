@@ -6,6 +6,8 @@ topics: ["typescript", "javascript", "web", "nodejs", "frontend"]
 published: false
 ---
 
+この記事は、[CYBOZU SUMMER BLOG FES '26](https://summer-blog-fes.cybozu.io/2026/) (Frontend Team) DAY 8の記事です。
+
 こんにちは、[tasshi](https://twitter.com/tasshi_me) です。
 
 この記事では、JavaScriptでストリーム処理を行うための標準API「Web Streams API（Streams API）」について、基本概念から実践的な使い方、Node.js Streamとの違いまでを解説します。

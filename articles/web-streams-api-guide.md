@@ -15,14 +15,7 @@ publication_name: "cybozu_frontend"
 
 この記事では、JavaScriptでストリーム処理を行うための標準API「Web Streams API（Streams API）」について、基本概念から実践的な使い方、Node.js Streamとの違いまでを解説します。
 
-本記事は、TSKaigi 2025で発表した「Web Streams APIの基本と実践、TypeScriptでの活用法」をベースに、記事として再構成したものです。
-
-@[speakerdeck](548673024e754ace9480f202843a555b)
-
-:::message
-発表は2025年5月時点の内容ですが、本記事のブラウザ・ランタイム対応状況は2026年7月時点の情報に更新しています。
-また、コードサンプルはNode.js v24 で動作確認しています。
-:::
+本記事は、TSKaigi 2025で発表した「[Web Streams APIの基本と実践、TypeScriptでの活用法](https://speakerdeck.com/tasshi/tskaigi-2025-web-streams-api)」をベースに、現在のブラウザ対応状況などを踏まえて記事として再構成したものです。
 
 ## ストリームとは何か
 
@@ -615,3 +608,12 @@ const stream = new TransformStream<string, number>({
 - [Stream - Node.js Documentation](https://nodejs.org/api/stream.html)
 - [Web Streams API - Node.js Documentation](https://nodejs.org/api/webstreams.html)
 - [Streams—The definitive guide - web.dev](https://web.dev/articles/streams)
+
+本記事のベースとなった発表スライドです。
+
+:::message
+発表は2025年5月時点の内容です。本記事のブラウザ・ランタイム対応状況は2026年7月時点の情報に更新しています。
+また、コードサンプルはNode.js v24 で動作確認しています。
+:::
+
+@[speakerdeck](548673024e754ace9480f202843a555b)

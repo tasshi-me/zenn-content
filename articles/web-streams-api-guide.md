@@ -178,7 +178,7 @@ console.log("完了");
 ```
 
 このように、独自のストリームオブジェクトはコンストラクタに処理用のメソッド（`pull`、`transform`、`write`など）を渡すことで作成できます。
-**chunkの型はGenericsで指定できる**ため、パイプチェーン全体を型安全に記述できます（詳細は後述）。
+**chunkの型はGenericsで指定できる**ため、パイプチェーン全体を型安全に記述できます。
 
 より実践的な例として、Webリソースをfetchしてファイルに保存する処理は次のように書けます。
 
@@ -240,7 +240,7 @@ APIのレスポンスは[JSONL形式](https://jsonlines.org/)（1行につき1�
 
 ![データインポートのパイプチェーン](/images/web-streams-api-guide/jsonl-import-pipeline.png)
 
-実装例です。`TransformStream`を継承した独自の変換ストリームを2つ作成しています。
+:::details 実装例（TransformStreamを継承した独自の変換ストリームを2つ作成）
 
 ```typescript
 type User = { id: number; name: string };
@@ -295,6 +295,7 @@ await response.body!
 
 console.log("インポート完了");
 ```
+:::
 
 レコード数がどれだけ多くても、メモリ上に展開されるのは処理中のchunkだけです。
 また、後述する背圧によって、DBへの書き込み速度に合わせてレスポンスの読み込み速度も自動で調整されます。
@@ -337,7 +338,7 @@ for await (const chunk of response.body!.pipeThrough(new TextDecoderStream())) {
 
 ### 背圧（Backpressure）
 
-そこで登場するのが**背圧（Backpressure）**という仕組みです。
+そこで登場するのが**背圧**（Backpressure）という仕組みです。
 
 - chunkを受け入れられない場合、ストリームは上流に停止信号を出す
 - 停止信号を受けた上流のストリームはデータの送信を停止する

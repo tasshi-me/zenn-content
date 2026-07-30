@@ -596,6 +596,12 @@ Chrome/Edgeは執筆時点（2026年7月）で未対応、SafariはSafari 27で�
 
 この記事がStreams APIを知るきっかけになれば嬉しいです。
 
+また、私たちは一緒にkintoneを改善してくれる仲間を探しています。
+興味のある方はぜひ採用情報をご確認ください！
+
+- [kintone開発エンジニア](https://cybozu.co.jp/recruit/entry/career/product-engineer-kintone.html)
+- [エンジニアリングマネージャー](https://cybozu.co.jp/recruit/entry/career/engineering-manager.html)
+
 ## 参考
 
 - [Streams API - MDN](https://developer.mozilla.org/ja/docs/Web/API/Streams_API)

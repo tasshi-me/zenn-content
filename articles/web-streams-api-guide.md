@@ -412,9 +412,9 @@ HTTP/1.1（`Transfer-Encoding: chunked`）で検証したところ、次の挙�
 - 内部キューが溜まってくると、TCPのウィンドウサイズが小さくなり、受信可能データを調整する
 - それでも処理しきれずに受信を止める場合は、zero windowパケットが送信される
 
-詳細は次のスライドにまとめています。
+詳細は続編の記事で解説しています。
 
-https://speakerdeck.com/tasshi/web-streams-api-and-tcp-flow-control
+https://zenn.dev/cybozu_frontend/articles/web-streams-api-backpressure-tcp
 :::
 
 ## Promiseベースの非同期処理との相互運用性

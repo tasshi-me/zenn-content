@@ -18,6 +18,9 @@ publication_name: "cybozu_frontend"
 さて、この背圧による制御はどこまで有効なのでしょうか？
 例えば`fetch()`のレスポンスをストリーム処理する場合、背圧が調整するのはJavaScriptの世界の中だけで、**ネットワークからは受信し続けて、溜まったデータがメモリを圧迫してしまう**のでしょうか。それとも**通信にもブレーキがかかる**のでしょうか。
 
+![Responseへの背圧（STOP）は、Serverとのネットワーク通信にも伝わるのか？](/images/web-streams-api-backpressure-tcp/backpressure-question.png)
+*`Response`への背圧（STOP）は、Serverとの通信制御にも伝わるのか？*
+
 この記事では、Web Streams APIの背圧制御とネットワーク通信の制御について、パケットキャプチャによる検証とNode.jsの実装コードをもとに解説します。
 
 :::message

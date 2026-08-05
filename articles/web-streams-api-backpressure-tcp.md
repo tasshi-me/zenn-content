@@ -64,6 +64,9 @@ TCPには**フロー制御**の仕組みがあり、受信側が処理しきれ�
 - 通信はHTTP/1.1、`Transfer-Encoding: chunked`
 - パケットはWiresharkでキャプチャ
 
+![検証環境の構成図。ServerとBatch RunnerがHTTPで通信し、その間のパケットをWiresharkでキャプチャする](/images/web-streams-api-backpressure-tcp/setup.png)
+*検証環境: ServerとBatch Runnerの間の通信をWiresharkでキャプチャする*
+
 終端の待機時間を変えることで背圧の発生頻度を変えながら、通信の変化（ウィンドウサイズ）と受信chunkサイズを観察します。
 
 ```typescript
@@ -142,6 +145,9 @@ chunkサイズの約16KBという値は、`Response.body`の内部受信バッ�
 
 1. 下流の処理が遅れて背圧が発生すると、まず**TCPのウィンドウサイズが小さくなり**、受信可能なデータ量が調整される
 2. それでも処理しきれず受信を止める場合は、サーバーに**Zero Window**パケットが送信され、データ転送自体が一時停止する
+
+![背圧の伝播のイメージ図。Responseへの背圧（STOP）が、Zero WindowとしてServerまで伝わる](/images/web-streams-api-backpressure-tcp/backpressure-zero-window.png)
+*`Response`への背圧（STOP）は、Zero WindowとしてServerまで伝わる*
 
 処理が滞った際に、JavaScriptの世界で背圧が発生するだけでなく、ネットワーク通信も制御されることが確認できました。
 

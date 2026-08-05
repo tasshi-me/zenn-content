@@ -60,22 +60,22 @@ TCPには**フロー制御**の仕組みがあり、受信側が処理しきれ�
 - **Server**: JSONLを約63MB（100万行）返却するAPI（Express）
 - **Batch Runner**: APIを呼び出し、レスポンスをストリーム処理する
   - 終端の`WritableStream`はchunkを受け取ると**一定時間待機**して処理遅延を発生させる（意図的に背圧を発生させる）
+  - 受け取ったchunkのサイズ（バイト数）をログに出力する（1回の読み出し量を観察するため）
 - 通信はHTTP/1.1、`Transfer-Encoding: chunked`
 - パケットはWiresharkでキャプチャ
 
-終端の待機時間を変えることで、背圧の発生頻度を変えながら通信の変化を観察します。
+終端の待機時間を変えることで背圧の発生頻度を変えながら、通信の変化（ウィンドウサイズ）と受信chunkサイズを観察します。
 
 ```typescript
 // 終端のWritableStream（概略）: 待機時間を変えて背圧の強さを調整する
-const slowWriter = new WritableStream<string>({
+const slowWriter = new WritableStream<Uint8Array>({
   async write(chunk) {
+    console.log("chunk size:", chunk.length);
     await setTimeout(delayMs); // 0ms / 100ms / 1000ms / 10000ms
   },
 });
 
-await response.body!
-  .pipeThrough(new TextDecoderStream())
-  .pipeTo(slowWriter);
+await response.body!.pipeTo(slowWriter);
 ```
 
 検証に使ったコードは再現リポジトリとして公開しています。
@@ -296,10 +296,33 @@ TCPスタックは受信バッファの空き容量に応じて広告ウィン�
 3. `net.Socket`のバッファに空きができると`_read()` → `tryReadStart()` → `handle.readStart()`（[net.js#L926-L948](https://github.com/nodejs/node/blob/v26.6.0/lib/net.js#L926-L948)）→ `uv_read_start()`
 4. カーネルの受信バッファが消費され、Window Updateが送信されてデータ転送が再開
 
-## 余談: fetch()のメモリリークについて
+## まとめ
 
-そもそも今回の検証のきっかけは、業務で遭遇したメモリの問題でした。
+- Web Streams APIの背圧は、JavaScriptのパイプチェーンの中だけでなく`fetch()`のネットワーク通信まで伝播する
+  - まずTCPのウィンドウサイズが絞られ、限界を超えるとZero Windowでデータ転送が一時停止する
+- Node.jsの実装から、読み取りの停止はJavaScriptのランタイムで行われて、最終的なウィンドウ制御はカーネルで行われていることが確認できた
 
+実は、パケットキャプチャによる検証を行った2024年10月時点でも、Node.jsのコードで該当する箇所を探してみたのですが、想像していたよりも内部に入る必要があり断念していました。
+この記事を書くに当たって改めてAIにコード探索してもらったのですが、一瞬でundiciのpause指示からTCPのウィンドウ制御までの経路を特定してくれて、良い時代になったのを感じました。
+
+## 参考
+
+- [Streams Standard - WHATWG](https://streams.spec.whatwg.org/)
+- [検証の再現リポジトリ](https://github.com/tasshi-playground/demo-stream-api-backpressure)
+- [fix: increased memory in finalization first appearing in v6.16.0 - nodejs/undici#3445](https://github.com/nodejs/undici/issues/3445)
+- [Web Streams API 入門 ― 基本概念から実践まで](https://zenn.dev/cybozu_frontend/articles/web-streams-api-guide)
+
+本記事のベースとなった発表スライドです。
+
+@[speakerdeck](5ed2933d684f47db955b39b08d8e78ba)
+
+## 余談: 検証のきっかけになったメモリリークについて
+
+そもそもこの検証のきっかけは、業務のバッチ処理で遭遇したメモリの問題でした。`fetch()`のレスポンスをストリーム処理していたにもかかわらずメモリ使用量が急増し、「ネットワーク通信には背圧が反映されず、`Response.body`の内部キューにchunkが溜まり続けているのでは？」と疑ったのが本記事の出発点です。
+
+しかし本編で見たとおり、背圧によるデータ転送の停止は通信まで反映されていました。メモリ急増の真犯人は、当時のundiciに混入していたメモリリークでした（[nodejs/undici#3445](https://github.com/nodejs/undici/issues/3445)）。undici v6.19.7で修正されNode.js v22.7.0に取り込まれているため、現在のNode.jsを最新に保っていれば遭遇することはありません。
+
+:::details 当時の調査と計測の詳細
 Webアプリケーションから全レコードをJSONL形式のAPIで取得し、加工して自サービスのDBに書き込んでいくバッチ処理を、次のようなパイプチェーンで実装していました。
 
 ```
@@ -307,7 +330,7 @@ Response.body → TextDecoderStream → LineSplitterStream → JsonParserStream 
 （読み込み）    （UTF-8デコード）    （行ごとに再分割）    （オブジェクトに変換）  （DBに書き込み）
 ```
 
-ストリームを使っているのでメモリに全レコードを載せることなく処理できるはずが、実際に動かすとメモリ使用量が急速に増加していきました。背圧が正常に動作していれば起きないはずの挙動です。
+ストリームを使っているのでメモリに全レコードを載せることなく処理できるはずが、実際に動かすとメモリ使用量が急速に増加していきました。
 
 ![Node.js v18.20.4でのメモリ使用量のグラフ。RSSが約3.5GBまで急増している](/images/web-streams-api-backpressure-tcp/memory-node-v18.png)
 *Node.js v18.20.4での計測。heapUsedやarrayBuffersはほぼ横ばいなのに、RSSだけが約3.5GBまで増加している*
@@ -320,13 +343,7 @@ Response.body → TextDecoderStream → LineSplitterStream → JsonParserStream 
 | 中間ストリーム | 独自実装を除去 | 効果なし |
 | 始端ストリーム | `fetch()` → ファイル読み込み | **効果あり** |
 
-始端を`fetch()`からファイル読み込みに変えるとメモリ増加が収まりました。つまり原因は`fetch()`のレスポンスよりも前にありそうです。
-ここで「もしや、ネットワーク通信には背圧による制御が反映されず、`Response.body`の内部キューにchunkが溜まり続けているのでは？」と疑ったのが、本記事の検証につながりました。
-
-しかし本編で見たとおり、背圧はきちんと通信まで反映されていました。では、あのメモリ急増はなぜ起きたのでしょうか。
-
-真犯人は、先ほど実装を読んだundici自身のメモリリークでした（[nodejs/undici#3445](https://github.com/nodejs/undici/issues/3445)）。
-undici v6.16.0で混入したもので、undici v6.19.7で修正され、Node.js v22.7.0に取り込まれました。
+始端を`fetch()`からファイル読み込みに変えるとメモリ増加が収まったため、原因は`fetch()`のレスポンスよりも前にあると絞り込めました。
 
 検証当時（2024年10月）のLTSラインへのbackport状況は、次のとおりでした。
 
@@ -338,26 +355,6 @@ undici v6.16.0で混入したもので、undici v6.19.7で修正され、Node.js
 
 ![Node.js v22.10.0でのメモリ使用量のグラフ。RSSは300MB前後で横ばいを維持している](/images/web-streams-api-backpressure-tcp/memory-node-v22.png)
 *Node.js v22.10.0での計測。RSSは300MB前後で安定し、リークは解消している*
+:::
 
-**2026年8月時点では、v18・v20はいずれもEOL**となっており、サポート中の各リリースラインの最新版ではすべて修正済みです（v22はv22.7.0以降）。現在のNode.jsを最新に保っていれば、このメモリリークに遭遇することはありません。
-
-## まとめ
-
-- Web Streams APIの背圧は、パイプチェーンの中だけでなく`fetch()`のネットワーク通信にも反映される
-  - まずTCPのウィンドウサイズが絞られ、限界を超えるとZero Windowでデータ転送が一時停止する
-- この経路はNode.jsの実装でも確認できた
-  - undici（pause）→ net.Socket（readStop）→ libuv（uv_read_stop）と読み取り停止が伝播し、最終的なウィンドウ制御はカーネルが行う
-
-2024年10月にパケットキャプチャによる検証を行った際にも、Node.jsのコードで該当する箇所を探してみたのですが、想像していたよりも複雑で断念しました。
-現在はAIによるコード検索が容易になったため、undiciのpause指示からTCPのウィンドウ制御までの経路を追うことができました。
-
-## 参考
-
-- [Streams Standard - WHATWG](https://streams.spec.whatwg.org/)
-- [検証の再現リポジトリ](https://github.com/tasshi-playground/demo-stream-api-backpressure)
-- [fix: increased memory in finalization first appearing in v6.16.0 - nodejs/undici#3445](https://github.com/nodejs/undici/issues/3445)
-- [Web Streams API 入門 ― 基本概念から実践まで](https://zenn.dev/cybozu_frontend/articles/web-streams-api-guide)
-
-本記事のベースとなった発表スライドです。
-
-@[speakerdeck](5ed2933d684f47db955b39b08d8e78ba)
+結果的に学びになったので良いですが、まずは既存のIssueを調べることもやはり大事ですね。

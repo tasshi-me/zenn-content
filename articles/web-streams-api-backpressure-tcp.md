@@ -73,6 +73,8 @@ TCPには**フロー制御**の仕組みがあり、受信側が処理しきれ�
 終端の待機時間を変えることで背圧の発生頻度を変えながら、通信の変化（ウィンドウサイズ）と受信chunkサイズを観察します。
 
 ```typescript
+import { setTimeout } from "node:timers/promises";
+
 // 終端のWritableStream（概略）: 待機時間を変えて背圧の強さを調整する
 const slowWriter = new WritableStream<Uint8Array>({
   async write(chunk) {
